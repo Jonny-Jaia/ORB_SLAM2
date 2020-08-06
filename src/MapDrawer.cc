@@ -41,21 +41,21 @@ MapDrawer::MapDrawer(Map* pMap, const string &strSettingPath):mpMap(pMap)
 
 }
 
-void MapDrawer::DrawMapPoints()
+void MapDrawer::DrawMapPoints()//绘制地图点
 {
-    const vector<MapPoint*> &vpMPs = mpMap->GetAllMapPoints();
-    const vector<MapPoint*> &vpRefMPs = mpMap->GetReferenceMapPoints();
+    const vector<MapPoint*> &vpMPs = mpMap->GetAllMapPoints();//获得所有地图点
+    const vector<MapPoint*> &vpRefMPs = mpMap->GetReferenceMapPoints();//获得所有参考地图点---局部地图点
 
-    set<MapPoint*> spRefMPs(vpRefMPs.begin(), vpRefMPs.end());
+    set<MapPoint*> spRefMPs(vpRefMPs.begin(), vpRefMPs.end());//
 
     if(vpMPs.empty())
         return;
 
     glPointSize(mPointSize);
-    glBegin(GL_POINTS);
-    glColor3f(0.0,0.0,0.0);
+    glBegin(GL_POINTS);//显示
+    glColor3f(0.0,0.0,0.0);//黑色（1，0，0）-红色
 
-    for(size_t i=0, iend=vpMPs.size(); i<iend;i++)
+    for(size_t i=0, iend=vpMPs.size(); i<iend;i++)//所有地图点绘制成黑色
     {
         if(vpMPs[i]->isBad() || spRefMPs.count(vpMPs[i]))
             continue;
@@ -66,10 +66,10 @@ void MapDrawer::DrawMapPoints()
 
     glPointSize(mPointSize);
     glBegin(GL_POINTS);
-    glColor3f(1.0,0.0,0.0);
+    glColor3f(1.0,0.0,0.0);//红色
 
     for(set<MapPoint*>::iterator sit=spRefMPs.begin(), send=spRefMPs.end(); sit!=send; sit++)
-    {
+    {//显示参考地图点--红色-会覆盖掉原来黑色部分的点
         if((*sit)->isBad())
             continue;
         cv::Mat pos = (*sit)->GetWorldPos();
